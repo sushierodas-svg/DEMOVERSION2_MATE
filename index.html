@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operations with Polynomials / Operaciones entre Polinomios - Bilingual Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f8ff 0%, #ffffff 100%);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .selector-idioma {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 200;
+            display: flex;
+            gap: 5px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .boton-idioma {
+            padding: 10px 18px;
+            border: 2px solid #244b5a;
+            background: white;
+            color: #244b5a;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .boton-idioma:hover {
+            background: #f7be00;
+            border-color: #db6015;
+        }
+
+        .boton-idioma.activo {
+            background: #db6015;
+            color: white;
+            border-color: #db6015;
+        }
+
+        .contenedor-principal {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .diapositiva {
+            display: none;
+            width: 100%;
+            height: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 15px;
+            padding: 60px 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            overflow-y: auto;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .diapositiva.activa {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .contenido-idioma {
+            display: none;
+        }
+
+        .contenido-idioma.activo {
+            display: block;
+        }
+
+        /* NAVEGACIÓN */
+        .navegacion {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 100;
+        }
+
+        .flecha {
+            width: 60px;
+            height: 60px;
+            background: #db6015;
+            border: none;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            pointer-events: all;
+            box-shadow: 0 5px 15px rgba(219, 96, 21, 0.3);
+        }
+
+        .flecha:hover {
+            background: #244b5a;
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(36, 75, 90, 0.4);
+        }
+
+        .flecha:active {
+            transform: scale(0.95);
+        }
+
+        .flecha.deshabilitada {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* CONTADOR */
+        .contador {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #244b5a;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 99;
+        }
+
+        /* PORTADA */
+        .portada {
+            text-align: center;
+            background: linear-gradient(135deg, #db6015 0%, #f7be00 100%);
+            color: white;
+            border-radius: 15px;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .portada h1 {
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .portada .subtitulo {
+            font-size: 24px;
+            opacity: 0.95;
+        }
+
+        .portada .info {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .icono-portada {
+            font-size: 80px;
+            margin: 20px 0;
+        }
+
+        .portada .motivacion {
+            font-size: 20px;
+            font-style: italic;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* TÍTULOS */
+        h1 {
+            color: #db6015;
+            font-size: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #244b5a;
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        .contenido {
+            color: #333;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .contenido p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .contenido ul, .contenido ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .contenido li {
+            margin-bottom: 10px;
+            list-style-position: inside;
+        }
+
+        /* TARJETAS */
+        .tarjeta-objetivo {
+            background: linear-gradient(135deg, #db6015 0%, #ff8c3a 100%);
+            color: white;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+
+        /* PALABRAS CLAVE */
+        .palabra-clave {
+            background: #f0f8ff;
+            border-left: 4px solid #db6015;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .palabra-clave .termino {
+            color: #db6015;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .palabra-clave .definicion {
+            color: #333;
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        /* PREGUNTAS */
+        .pregunta-reflexion {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e0f0ff 100%);
+            border-left: 4px solid #244b5a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 17px;
+            color: #244b5a;
+        }
+
+        .pregunta-reflexion::before {
+            content: "❓ ";
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        /* EXPLORACIÓN */
+        .exploracion {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .imagen-principal {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e0f0ff 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            border: 3px solid #db6015;
+        }
+
+        .elemento-interactivo {
+            background: #f7be00;
+            padding: 15px 30px;
+            border-radius: 25px;
+            color: #244b5a;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        .elemento-interactivo:hover {
+            background: #db6015;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(219, 96, 21, 0.3);
+        }
+
+        /* ACTIVIDADES */
+        .actividad {
+            background: #f0f8ff;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .opciones {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .opcion {
+            background: white;
+            border: 2px solid #244b5a;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            color: #244b5a;
+        }
+
+        .opcion:hover {
+            border-color: #db6015;
+            background: #fff8f0;
+            transform: translateX(5px);
+        }
+
+        .opcion.seleccionada {
+            background: #db6015;
+            color: white;
+            border-color: #db6015;
+        }
+
+        .retroalimentacion {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 17px;
+            display: none;
+        }
+
+        .retroalimentacion.correcta {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+            display: block;
+        }
+
+        .retroalimentacion.incorrecta {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #f5c6cb;
+            display: block;
+        }
+
+        .boton-reintentar {
+            background: #244b5a;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .boton-reintentar:hover {
+            background: #db6015;
+            transform: translateY(-2px);
+        }
+
+        /* REPASO */
+        .pregunta-repaso {
+            background: #f0f8ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #db6015;
+        }
+
+        .pregunta-repaso .numero {
+            color: #db6015;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .pregunta-repaso .enunciado {
+            font-size: 17px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .respuestas-repaso {
+            display: grid;
+            gap: 10px;
+        }
+
+        .respuesta-opcion {
+            background: white;
+            border: 2px solid #244b5a;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .respuesta-opcion:hover {
+            border-color: #db6015;
+            background: #fff8f0;
+        }
+
+        .retroalimentacion-repaso {
+            margin-top: 12px;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 16px;
+            display: none;
+            border-left: 4px solid #ccc;
+        }
+
+        .retroalimentacion-repaso.correcta {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+            display: block;
+        }
+
+        .retroalimentacion-repaso.incorrecta {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #f5c6cb;
+            display: block;
+        }
+
+        /* METACOGNICIÓN */
+        .reflexion-contenedor {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e8f4ff 100%);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #244b5a;
+        }
+
+        .pregunta-metacognitiva {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #db6015;
+            font-size: 17px;
+            color: #333;
+        }
+
+        .boton-metacognitiva {
+            background: white;
+            border: 2px solid #244b5a;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            color: #244b5a;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .boton-metacognitiva:hover {
+            background: #f7be00;
+            border-color: #db6015;
+            transform: translateX(5px);
+        }
+
+        .boton-metacognitiva.seleccionado {
+            background: #db6015;
+            color: white;
+            border-color: #db6015;
+        }
+
+        /* CIERRE */
+        .cierre {
+            text-align: center;
+            background: linear-gradient(135deg, #244b5a 0%, #2d5f7b 100%);
+            color: white;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .cierre h1 {
+            color: #f7be00;
+            font-size: 44px;
+        }
+
+        .sello-logro {
+            font-size: 100px;
+            margin: 20px 0;
+            animation: girar 2s ease-in-out;
+        }
+
+        @keyframes girar {
+            0% { transform: rotateY(0deg) scale(0.5); }
+            50% { transform: rotateY(180deg) scale(1.1); }
+            100% { transform: rotateY(360deg) scale(1); }
+        }
+
+        .cierre .mensaje {
+            font-size: 22px;
+            line-height: 1.8;
+        }
+
+        .cierre .proximos-pasos {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* TEOREMA */
+        .teorema {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a6 100%);
+            border-left: 5px solid #db6015;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+            color: #244b5a;
+        }
+
+        .teorema .titulo {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #db6015;
+        }
+
+        .formula {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            color: #244b5a;
+            font-weight: bold;
+            border: 1px solid #f7be00;
+        }
+
+        .diapositiva::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .diapositiva::-webkit-scrollbar-track {
+            background: #f0f8ff;
+        }
+
+        .diapositiva::-webkit-scrollbar-thumb {
+            background: #db6015;
+            border-radius: 4px;
+        }
+
+        .diapositiva::-webkit-scrollbar-thumb:hover {
+            background: #244b5a;
+        }
+
+        @media (max-width: 768px) {
+            .diapositiva {
+                padding: 40px 25px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            .contenido {
+                font-size: 16px;
+            }
+
+            .portada h1 {
+                font-size: 36px;
+            }
+
+            .icono-portada {
+                font-size: 60px;
+            }
+
+            .flecha {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+
+            .selector-idioma {
+                top: 10px;
+                right: 10px;
+            }
+
+            .boton-idioma {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SELECTOR DE IDIOMA -->
+<div class="selector-idioma">
+    <button class="boton-idioma activo" id="btn-es" onclick="cambiarIdioma('es')">🇪🇸 ES</button>
+    <button class="boton-idioma" id="btn-en" onclick="cambiarIdioma('en')">🇺🇸 EN</button>
+</div>
+
+<div class="contenedor-principal" id="contenedor">
+    <!-- DIAPOSITIVA 1: PORTADA -->
+    <div class="diapositiva activa">
+        <div class="portada">
+            <div class="icono-portada">🎯</div>
+            
+            <div class="contenido-idioma activo" id="portada-es">
+                <h1>Operaciones entre Polinomios</h1>
+                <p class="subtitulo">Lección 1 - Matemáticas</p>
+                <p class="info">4° Bachillerato | Colegio Escolaris</p>
+                <p class="motivacion">"Las matemáticas son el lenguaje del universo. Hoy aprendemos a resolver operaciones con polinomios con confianza."</p>
+            </div>
+
+            <div class="contenido-idioma" id="portada-en">
+                <h1>Operations with Polynomials</h1>
+                <p class="subtitulo">Lesson 1 - Mathematics</p>
+                <p class="info">4th Grade High School | Escolaris School</p>
+                <p class="motivacion">"Mathematics is the language of the universe. Today we learn to solve polynomial operations with confidence."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 2: OBJETIVOS -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="obj-es">
+            <h1>Objetivos de aprendizaje</h1>
+            <div class="contenido">
+                <div class="tarjeta-objetivo">
+                    ✓ Resolver operaciones de suma y resta de polinomios utilizando la combinación de términos semejantes
+                </div>
+                <div class="tarjeta-objetivo">
+                    ✓ Aplicar la propiedad distributiva para multiplicar polinomios correctamente
+                </div>
+                <div class="tarjeta-objetivo">
+                    ✓ Ejecutar divisiones de polinomios mediante algoritmos establecidos
+                </div>
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="obj-en">
+            <h1>Learning Objectives</h1>
+            <div class="contenido">
+                <div class="tarjeta-objetivo">
+                    ✓ Solve addition and subtraction of polynomials using the combination of similar terms
+                </div>
+                <div class="tarjeta-objetivo">
+                    ✓ Apply the distributive property to multiply polynomials correctly
+                </div>
+                <div class="tarjeta-objetivo">
+                    ✓ Execute polynomial division using established algorithms
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 3: ACTIVACIÓN -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="act-es">
+            <h1>¿Qué recordamos?</h1>
+            <div class="contenido">
+                <p>Antes de comenzar, reflexionemos sobre estos conceptos fundamentales:</p>
+                
+                <div class="pregunta-reflexion">
+                    ¿Qué es una variable? ¿Cómo se representa?
+                </div>
+
+                <div class="pregunta-reflexion">
+                    ¿Cuáles son los términos semejantes? ¿Por qué es importante identificarlos?
+                </div>
+
+                <div class="pregunta-reflexion">
+                    ¿Recuerdas la propiedad distributiva? ¿Cómo se aplica en multiplicaciones?
+                </div>
+
+                <p style="margin-top: 30px; background: #f7be00; padding: 20px; border-radius: 8px; color: #244b5a; font-weight: bold;">
+                    💡 Consejo: Estos conceptos son la base para las operaciones entre polinomios. Si tienes dudas, ¡repásalos primero!
+                </p>
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="act-en">
+            <h1>What do we remember?</h1>
+            <div class="contenido">
+                <p>Before we start, let's review some important concepts:</p>
+                
+                <div class="pregunta-reflexion">
+                    What is a variable? How is it represented?
+                </div>
+
+                <div class="pregunta-reflexion">
+                    What are similar terms? Why is it important to identify them?
+                </div>
+
+                <div class="pregunta-reflexion">
+                    Do you remember the distributive property? How do we use it in multiplication?
+                </div>
+
+                <p style="margin-top: 30px; background: #f7be00; padding: 20px; border-radius: 8px; color: #244b5a; font-weight: bold;">
+                    💡 Tip: These concepts are the foundation for operations with polynomials. If you have questions, review them first!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 4: PALABRAS CLAVE -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="palabras-es">
+            <h1>Conceptos clave</h1>
+            <div class="contenido">
+                
+                <div class="palabra-clave">
+                    <div class="termino">📌 Polinomio</div>
+                    <div class="definicion">Expresión algebraica que contiene términos variables con exponentes enteros no negativos, unidos por sumas o restas. Ejemplo: 3x² + 2x - 5</div>
+                </div>
+
+                <div class="palabra-clave">
+                    <div class="termino">📌 Términos semejantes</div>
+                    <div class="definicion">Términos que tienen la misma variable con el mismo exponente. Ejemplo: 3x² y 5x² son semejantes; 3x² y 3x NO son semejantes.</div>
+                </div>
+
+                <div class="palabra-clave">
+                    <div class="termino">📌 Grado de un polinomio</div>
+                    <div class="definicion">Es el mayor exponente de la variable en el polinomio. En 4x³ + 2x² + x, el grado es 3.</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="palabras-en">
+            <h1>Key Concepts</h1>
+            <div class="contenido">
+                
+                <div class="palabra-clave">
+                    <div class="termino">📌 Polynomial</div>
+                    <div class="definicion">An algebraic expression with variable terms with non-negative integer exponents, united by addition or subtraction. Example: 3x² + 2x - 5</div>
+                </div>
+
+                <div class="palabra-clave">
+                    <div class="termino">📌 Similar Terms</div>
+                    <div class="definicion">Terms that have the same variable with the same exponent. Example: 3x² and 5x² are similar; 3x² and 3x are NOT similar.</div>
+                </div>
+
+                <div class="palabra-clave">
+                    <div class="termino">📌 Degree of a Polynomial</div>
+                    <div class="definicion">It is the largest exponent of the variable in the polynomial. In 4x³ + 2x² + x, the degree is 3.</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 5: SUMA Y RESTA -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="suma-es">
+            <h1>Suma y Resta de Polinomios</h1>
+            <div class="contenido">
+                <p><strong>¿Cómo sumamos polinomios?</strong></p>
+                <p>Para sumar o restar polinomios, <strong>combinamos los términos semejantes</strong>. Es como agrupar objetos iguales.</p>
+
+                <div class="teorema">
+                    <div class="titulo">Procedimiento:</div>
+                    <ol>
+                        <li>Escribir los polinomios uno debajo del otro</li>
+                        <li>Identificar términos semejantes (misma variable y exponente)</li>
+                        <li>Sumar o restar los coeficientes</li>
+                        <li>Escribir el resultado en orden de mayor a menor exponente</li>
+                    </ol>
+                </div>
+
+                <p><strong>Ejemplo de suma:</strong></p>
+                <div class="formula">
+                    (3x² + 2x - 5) + (x² + 4x + 3) = 4x² + 6x - 2
+                </div>
+
+                <p><strong>Ejemplo de resta:</strong></p>
+                <div class="formula">
+                    (5x² - 3x + 7) - (2x² + x - 4) = 3x² - 4x + 11
+                </div>
+
+                <p style="margin-top: 20px; background: #fff3cd; padding: 15px; border-radius: 8px;">
+                    ⚠️ <strong>Recuerda:</strong> En las restas, cambian los signos del segundo polinomio.
+                </p>
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="suma-en">
+            <h1>Addition and Subtraction of Polynomials</h1>
+            <div class="contenido">
+                <p><strong>How do we add polynomials?</strong></p>
+                <p>To add or subtract polynomials, we <strong>combine similar terms</strong>. It's like grouping equal objects.</p>
+
+                <div class="teorema">
+                    <div class="titulo">Procedure:</div>
+                    <ol>
+                        <li>Write the polynomials one below the other</li>
+                        <li>Identify similar terms (same variable and exponent)</li>
+                        <li>Add or subtract the coefficients</li>
+                        <li>Write the result in order from highest to lowest exponent</li>
+                    </ol>
+                </div>
+
+                <p><strong>Example of addition:</strong></p>
+                <div class="formula">
+                    (3x² + 2x - 5) + (x² + 4x + 3) = 4x² + 6x - 2
+                </div>
+
+                <p><strong>Example of subtraction:</strong></p>
+                <div class="formula">
+                    (5x² - 3x + 7) - (2x² + x - 4) = 3x² - 4x + 11
+                </div>
+
+                <p style="margin-top: 20px; background: #fff3cd; padding: 15px; border-radius: 8px;">
+                    ⚠️ <strong>Remember:</strong> In subtraction, the signs of the second polynomial change.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 6: MULTIPLICACIÓN -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="mult-es">
+            <h1>Multiplicación de Polinomios</h1>
+            <div class="contenido">
+                <p><strong>¿Cómo multiplicamos polinomios?</strong></p>
+                <p>Usamos la <strong>propiedad distributiva</strong>: multiplicamos cada término del primer polinomio por cada término del segundo.</p>
+
+                <div class="teorema">
+                    <div class="titulo">Pasos:</div>
+                    <ol>
+                        <li>Multiplicar el primer término del primer polinomio por todos los términos del segundo</li>
+                        <li>Repetir con el siguiente término, y así sucesivamente</li>
+                        <li>Sumar los resultados, combinando términos semejantes</li>
+                    </ol>
+                </div>
+
+                <p><strong>Ejemplo - Monomio × Polinomio:</strong></p>
+                <div class="formula">
+                    2x × (x² + 3x - 5) = 2x³ + 6x² - 10x
+                </div>
+
+                <p><strong>Ejemplo - Polinomio × Polinomio:</strong></p>
+                <div class="formula">
+                    (x + 2)(x + 3) = x² + 3x + 2x + 6 = x² + 5x + 6
+                </div>
+
+                <p style="margin-top: 20px; background: #fff3cd; padding: 15px; border-radius: 8px;">
+                    💡 <strong>Consejo:</strong> Organiza el trabajo en columnas para no olvidar términos.
+                </p>
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="mult-en">
+            <h1>Multiplication of Polynomials</h1>
+            <div class="contenido">
+                <p><strong>How do we multiply polynomials?</strong></p>
+                <p>We use the <strong>distributive property</strong>: we multiply each term of the first polynomial by each term of the second.</p>
+
+                <div class="teorema">
+                    <div class="titulo">Steps:</div>
+                    <ol>
+                        <li>Multiply the first term of the first polynomial by all terms of the second</li>
+                        <li>Repeat with the next term, and so on</li>
+                        <li>Add the results, combining similar terms</li>
+                    </ol>
+                </div>
+
+                <p><strong>Example - Monomial × Polynomial:</strong></p>
+                <div class="formula">
+                    2x × (x² + 3x - 5) = 2x³ + 6x² - 10x
+                </div>
+
+                <p><strong>Example - Polynomial × Polynomial:</strong></p>
+                <div class="formula">
+                    (x + 2)(x + 3) = x² + 3x + 2x + 6 = x² + 5x + 6
+                </div>
+
+                <p style="margin-top: 20px; background: #fff3cd; padding: 15px; border-radius: 8px;">
+                    💡 <strong>Tip:</strong> Organize your work in columns so you don't forget any terms.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 7: DIVISIÓN -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="div-es">
+            <h1>División de Polinomios</h1>
+            <div class="contenido">
+                <p><strong>¿Cómo dividimos polinomios?</strong></p>
+                <p>La división de polinomios es similar a la división aritmética. Trabajamos con el polinomio dividendo y divisor.</p>
+
+                <div class="teorema">
+                    <div class="titulo">División de Monomio ÷ Monomio:</div>
+                    <p>Divide los coeficientes y resta los exponentes.</p>
+                </div>
+
+                <p><strong>Ejemplo:</strong></p>
+                <div class="formula">
+                    8x⁴ ÷ 2x² = 4x²
+                </div>
+
+                <div class="teorema">
+                    <div class="titulo">División Polinomio ÷ Monomio:</div>
+                    <p>Divide cada término del polinomio entre el monomio.</p>
+                </div>
+
+                <p><strong>Ejemplo:</strong></p>
+                <div class="formula">
+                    (6x³ + 9x² + 3x) ÷ 3x = 2x² + 3x + 1
+                </div>
+
+                <p style="margin-top: 20px; background: #f0f8ff; padding: 15px; border-radius: 8px; border-left: 4px solid #db6015;">
+                    📌 <strong>Nota:</strong> La división de polinomio entre polinomio se realiza mediante división larga o sintética (temas avanzados).
+                </p>
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="div-en">
+            <h1>Division of Polynomials</h1>
+            <div class="contenido">
+                <p><strong>How do we divide polynomials?</strong></p>
+                <p>Polynomial division is similar to arithmetic division. We work with the dividend polynomial and the divisor.</p>
+
+                <div class="teorema">
+                    <div class="titulo">Monomial ÷ Monomial:</div>
+                    <p>Divide the coefficients and subtract the exponents.</p>
+                </div>
+
+                <p><strong>Example:</strong></p>
+                <div class="formula">
+                    8x⁴ ÷ 2x² = 4x²
+                </div>
+
+                <div class="teorema">
+                    <div class="titulo">Polynomial ÷ Monomial:</div>
+                    <p>Divide each term of the polynomial by the monomial.</p>
+                </div>
+
+                <p><strong>Example:</strong></p>
+                <div class="formula">
+                    (6x³ + 9x² + 3x) ÷ 3x = 2x² + 3x + 1
+                </div>
+
+                <p style="margin-top: 20px; background: #f0f8ff; padding: 15px; border-radius: 8px; border-left: 4px solid #db6015;">
+                    📌 <strong>Note:</strong> Polynomial by polynomial division is done using long division or synthetic division (advanced topics).
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 8: EXPLORACIÓN VISUAL -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="expl-es">
+            <h1>Exploración Visual</h1>
+            <div class="exploracion">
+                <p style="font-size: 18px; color: #333;">Mira este ejemplo visual de cómo se estructuran los polinomios:</p>
+                
+                <div class="imagen-principal">
+                    📊
+                </div>
+
+                <div style="text-align: center; color: #244b5a;">
+                    <p style="font-weight: bold; margin-bottom: 10px;">El Polinomio: 4x³ + 3x² - 2x + 5</p>
+                    <p>Término 1: 4x³ (grado 3, coeficiente 4)</p>
+                    <p>Término 2: 3x² (grado 2, coeficiente 3)</p>
+                    <p>Término 3: -2x (grado 1, coeficiente -2)</p>
+                    <p>Término 4: 5 (término independiente)</p>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <div class="elemento-interactivo" onclick="mostrarEjemploBilingual('suma', 'es')">📌 Ver ejemplo: Suma</div>
+                    <div class="elemento-interactivo" onclick="mostrarEjemploBilingual('resta', 'es')">📌 Ver ejemplo: Resta</div>
+                    <div class="elemento-interactivo" onclick="mostrarEjemploBilingual('mult', 'es')">📌 Ver ejemplo: Multiplicación</div>
+                </div>
+
+                <div id="ejemplo-mostrado-es" style="margin-top: 20px; padding: 20px; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #db6015; display: none; text-align: left;">
+                    <p id="contenido-ejemplo-es" style="font-size: 17px; color: #333;"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="expl-en">
+            <h1>Visual Exploration</h1>
+            <div class="exploracion">
+                <p style="font-size: 18px; color: #333;">Look at this visual example of how polynomials are structured:</p>
+                
+                <div class="imagen-principal">
+                    📊
+                </div>
+
+                <div style="text-align: center; color: #244b5a;">
+                    <p style="font-weight: bold; margin-bottom: 10px;">The Polynomial: 4x³ + 3x² - 2x + 5</p>
+                    <p>Term 1: 4x³ (degree 3, coefficient 4)</p>
+                    <p>Term 2: 3x² (degree 2, coefficient 3)</p>
+                    <p>Term 3: -2x (degree 1, coefficient -2)</p>
+                    <p>Term 4: 5 (independent term)</p>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <div class="elemento-interactivo" onclick="mostrarEjemploBilingual('suma', 'en')">📌 See example: Addition</div>
+                    <div class="elemento-interactivo" onclick="mostrarEjemploBilingual('resta', 'en')">📌 See example: Subtraction</div>
+                    <div class="elemento-interactivo" onclick="mostrarEjemploBilingual('mult', 'en')">📌 See example: Multiplication</div>
+                </div>
+
+                <div id="ejemplo-mostrado-en" style="margin-top: 20px; padding: 20px; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #db6015; display: none; text-align: left;">
+                    <p id="contenido-ejemplo-en" style="font-size: 17px; color: #333;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 9: ACTIVIDAD DE COMPRENSIÓN -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="act-comp-es">
+            <h1>Actividad: Suma de Polinomios</h1>
+            <div class="contenido">
+                <div class="actividad">
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        <strong>Pregunta:</strong> ¿Cuál es el resultado de sumar (2x² + 3x - 1) + (x² - 2x + 4)?
+                    </p>
+
+                    <div class="opciones" id="opciones-es-act1">
+                        <div class="opcion" onclick="verificarRespuesta(this, 'correcta', 'Excelente, identificaste correctamente los términos semejantes y realizaste las operaciones.', 'es-act1')">
+                            3x² + x + 3
+                        </div>
+                        <div class="opcion" onclick="verificarRespuesta(this, 'incorrecta', 'No es correcto. Recuerda: 2x² + x² = 3x², 3x + (-2x) = x, -1 + 4 = 3. Intenta nuevamente.', 'es-act1')">
+                            2x² + x + 4
+                        </div>
+                        <div class="opcion" onclick="verificarRespuesta(this, 'incorrecta', 'No es correcto. Observa bien cómo sumas los términos semejantes. Intenta nuevamente.', 'es-act1')">
+                            3x² + 5x + 3
+                        </div>
+                    </div>
+
+                    <div class="retroalimentacion" id="retroalimentacion-es-act1"></div>
+                    <button class="boton-reintentar" id="reintentar-es-act1" style="display: none;" onclick="reintentar('es-act1')">🔄 Intentar nuevamente</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="act-comp-en">
+            <h1>Activity: Adding Polynomials</h1>
+            <div class="contenido">
+                <div class="actividad">
+                    <p style="font-size: 18px; margin-bottom: 20px;">
+                        <strong>Question:</strong> What is the result of adding (2x² + 3x - 1) + (x² - 2x + 4)?
+                    </p>
+
+                    <div class="opciones" id="opciones-en-act1">
+                        <div class="opcion" onclick="verificarRespuesta(this, 'correcta', 'Excellent! You correctly identified the similar terms and performed the operations.', 'en-act1')">
+                            3x² + x + 3
+                        </div>
+                        <div class="opcion" onclick="verificarRespuesta(this, 'incorrecta', 'Not correct. Remember: 2x² + x² = 3x², 3x + (-2x) = x, -1 + 4 = 3. Try again.', 'en-act1')">
+                            2x² + x + 4
+                        </div>
+                        <div class="opcion" onclick="verificarRespuesta(this, 'incorrecta', 'Not correct. Look carefully at how you add the similar terms. Try again.', 'en-act1')">
+                            3x² + 5x + 3
+                        </div>
+                    </div>
+
+                    <div class="retroalimentacion" id="retroalimentacion-en-act1"></div>
+                    <button class="boton-reintentar" id="reintentar-en-act1" style="display: none;" onclick="reintentar('en-act1')">🔄 Try again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 10: JUEGO -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="game-es">
+            <h1>Juego: Clasificar Operaciones</h1>
+            <div class="contenido">
+                <p style="font-size: 18px; margin-bottom: 20px;">
+                    <strong>Instrucciones:</strong> Lee cada operación y haz clic en el tipo correcto. ¡Gana todos los puntos!
+                </p>
+
+                <div id="contenedor-juego">
+                    <!-- Generated with JavaScript -->
+                </div>
+
+                <div id="resultado-juego-final" style="margin-top: 20px; padding: 20px; background: #f0f8ff; border-radius: 8px; display: none; text-align: center;">
+                    <p id="texto-resultado-juego" style="font-size: 18px; font-weight: bold; color: #244b5a; margin-bottom: 15px;"></p>
+                    <button class="boton-reintentar" onclick="reiniciarJuego()">🔄 Volver a jugar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="game-en">
+            <h1>Game: Classify Operations</h1>
+            <div class="contenido">
+                <p style="font-size: 18px; margin-bottom: 20px;">
+                    <strong>Instructions:</strong> Read each operation and click on the correct type. Win all the points!
+                </p>
+
+                <div id="contenedor-juego-en">
+                    <!-- Generated with JavaScript -->
+                </div>
+
+                <div id="resultado-juego-final-en" style="margin-top: 20px; padding: 20px; background: #f0f8ff; border-radius: 8px; display: none; text-align: center;">
+                    <p id="texto-resultado-juego-en" style="font-size: 18px; font-weight: bold; color: #244b5a; margin-bottom: 15px;"></p>
+                    <button class="boton-reintentar" onclick="reiniciarJuegoEn()">🔄 Play again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 11: APLICACIÓN PRÁCTICA -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="pract-es">
+            <h1>Aplicación Práctica</h1>
+            <div class="contenido">
+                <div style="background: #f0f8ff; padding: 25px; border-radius: 12px; border-left: 4px solid #244b5a;">
+                    <p style="font-size: 18px; margin-bottom: 20px;"><strong>📐 Situación real: Construyendo un jardín rectangular</strong></p>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 2px solid #db6015;">
+                        <p style="font-size: 17px; line-height: 1.8;">
+                            Un jardinero necesita calcular cuánto espacio tendrá un jardín rectangular con las siguientes dimensiones:
+                        </p>
+                        <p style="font-size: 19px; font-weight: bold; color: #db6015; margin: 15px 0;">
+                            Largo: (2x + 3) metros<br>
+                            Ancho: (x + 2) metros
+                        </p>
+                    </div>
+
+                    <p style="font-size: 17px; color: #333; margin-bottom: 15px;">
+                        Para saber el área del jardín, debemos <strong>multiplicar largo × ancho</strong>:
+                    </p>
+
+                    <div class="teorema" style="background: #fff9e6; margin: 20px 0;">
+                        <div class="titulo">Operación: (2x + 3) × (x + 2)</div>
+                    </div>
+
+                    <p style="font-size: 16px; color: #333; margin: 15px 0;">
+                        <strong>Paso 1:</strong> Multiplica cada término del primer polinomio por cada término del segundo
+                    </p>
+                    <div class="formula">
+                        (2x) × (x) = 2x²
+                    </div>
+                    <div class="formula">
+                        (2x) × (2) = 4x
+                    </div>
+                    <div class="formula">
+                        (3) × (x) = 3x
+                    </div>
+                    <div class="formula">
+                        (3) × (2) = 6
+                    </div>
+
+                    <p style="font-size: 16px; color: #333; margin: 15px 0;">
+                        <strong>Paso 2:</strong> Suma todos los resultados y combina términos semejantes
+                    </p>
+                    <div class="teorema" style="background: #d4edda; border-left-color: #28a745;">
+                        <div class="titulo" style="color: #155724;">✓ Resultado: 2x² + 4x + 3x + 6 = <strong>2x² + 7x + 6 m²</strong></div>
+                    </div>
+
+                    <p style="font-size: 16px; color: #333; margin: 20px 0;">
+                        <strong>Paso 3:</strong> Si x = 5 metros, calcula el área real:
+                    </p>
+                    <div class="formula">
+                        Área = 2(5)² + 7(5) + 6 = 2(25) + 35 + 6 = 50 + 35 + 6 = <strong>91 m²</strong>
+                    </div>
+
+                    <div style="background: #f7be00; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; color: #244b5a; font-weight: bold;">
+                        ✨ El jardín tendrá un área total de 91 metros cuadrados
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="pract-en">
+            <h1>Practical Application</h1>
+            <div class="contenido">
+                <div style="background: #f0f8ff; padding: 25px; border-radius: 12px; border-left: 4px solid #244b5a;">
+                    <p style="font-size: 18px; margin-bottom: 20px;"><strong>📐 Real Situation: Building a rectangular garden</strong></p>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 2px solid #db6015;">
+                        <p style="font-size: 17px; line-height: 1.8;">
+                            A gardener needs to calculate how much space a rectangular garden will have with the following dimensions:
+                        </p>
+                        <p style="font-size: 19px; font-weight: bold; color: #db6015; margin: 15px 0;">
+                            Length: (2x + 3) meters<br>
+                            Width: (x + 2) meters
+                        </p>
+                    </div>
+
+                    <p style="font-size: 17px; color: #333; margin-bottom: 15px;">
+                        To find the area of the garden, we must <strong>multiply length × width</strong>:
+                    </p>
+
+                    <div class="teorema" style="background: #fff9e6; margin: 20px 0;">
+                        <div class="titulo">Operation: (2x + 3) × (x + 2)</div>
+                    </div>
+
+                    <p style="font-size: 16px; color: #333; margin: 15px 0;">
+                        <strong>Step 1:</strong> Multiply each term of the first polynomial by each term of the second
+                    </p>
+                    <div class="formula">
+                        (2x) × (x) = 2x²
+                    </div>
+                    <div class="formula">
+                        (2x) × (2) = 4x
+                    </div>
+                    <div class="formula">
+                        (3) × (x) = 3x
+                    </div>
+                    <div class="formula">
+                        (3) × (2) = 6
+                    </div>
+
+                    <p style="font-size: 16px; color: #333; margin: 15px 0;">
+                        <strong>Step 2:</strong> Add all the results and combine similar terms
+                    </p>
+                    <div class="teorema" style="background: #d4edda; border-left-color: #28a745;">
+                        <div class="titulo" style="color: #155724;">✓ Result: 2x² + 4x + 3x + 6 = <strong>2x² + 7x + 6 m²</strong></div>
+                    </div>
+
+                    <p style="font-size: 16px; color: #333; margin: 20px 0;">
+                        <strong>Step 3:</strong> If x = 5 meters, calculate the real area:
+                    </p>
+                    <div class="formula">
+                        Area = 2(5)² + 7(5) + 6 = 2(25) + 35 + 6 = 50 + 35 + 6 = <strong>91 m²</strong>
+                    </div>
+
+                    <div style="background: #f7be00; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; color: #244b5a; font-weight: bold;">
+                        ✨ The garden will have a total area of 91 square meters
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 12: REPASO FINAL -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="repaso-es">
+            <h1>Repaso Final</h1>
+            <div class="contenido">
+                <p style="margin-bottom: 20px;">Contesta correctamente las siguientes preguntas:</p>
+
+                <div class="pregunta-repaso">
+                    <div class="numero">Pregunta 1:</div>
+                    <div class="enunciado">¿Cuál es el resultado de (5x + 2) + (3x - 1)?</div>
+                    <div class="respuestas-repaso" id="repaso-1">
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'correcta', '✓ ¡Correcto! Identificaste bien que 5x + 3x = 8x y 2 - 1 = 1.', 'repaso-1')">8x + 1</div>
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'incorrecta', '✗ No es correcto. Suma los términos con x: 5x + 3x = 8x, y los números: 2 - 1 = 1. Intenta nuevamente.', 'repaso-1')">2x + 3</div>
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'incorrecta', '✗ No es correcto. Recuerda que debes restar 1, no sumar. Intenta nuevamente.', 'repaso-1')">8x - 1</div>
+                    </div>
+                    <div id="retroalimentacion-repaso-1" class="retroalimentacion-repaso"></div>
+                    <button class="boton-reintentar" id="reintentar-repaso-1" style="display: none;" onclick="reintentar('repaso-1')">🔄 Intentar de nuevo</button>
+                </div>
+
+                <div class="pregunta-repaso">
+                    <div class="numero">Pregunta 2:</div>
+                    <div class="enunciado">¿Cuál es el resultado de 3x · (2x² + x - 1)?</div>
+                    <div class="respuestas-repaso" id="repaso-2">
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'incorrecta', '✗ No es correcto. Tienes que multiplicar 3x por cada término. Intenta nuevamente.', 'repaso-2')">6x³ + x - 1</div>
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'correcta', '✓ ¡Excelente! Aplicaste correctamente la propiedad distributiva: 3x·2x² = 6x³, 3x·x = 3x², 3x·(-1) = -3x.', 'repaso-2')">6x³ + 3x² - 3x</div>
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'incorrecta', '✗ No es correcto. Recuerda multiplicar cada término del paréntesis. Intenta nuevamente.', 'repaso-2')">5x³ + 2x</div>
+                    </div>
+                    <div id="retroalimentacion-repaso-2" class="retroalimentacion-repaso"></div>
+                    <button class="boton-reintentar" id="reintentar-repaso-2" style="display: none;" onclick="reintentar('repaso-2')">🔄 Intentar de nuevo</button>
+                </div>
+
+                <div class="pregunta-repaso">
+                    <div class="numero">Pregunta 3:</div>
+                    <div class="enunciado">¿Cuál es el resultado de (6x⁴ + 4x³ + 2x) ÷ 2x?</div>
+                    <div class="respuestas-repaso" id="repaso-3">
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'correcta', '✓ ¡Perfecto! Dividiste correctamente cada término: 6x⁴÷2x = 3x³, 4x³÷2x = 2x², 2x÷2x = 1.', 'repaso-3')">3x³ + 2x² + 1</div>
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'incorrecta', '✗ No es correcto. Recuerda que debes dividir cada término entre 2x. Intenta nuevamente.', 'repaso-3')">6x³ + 2x² + x</div>
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'incorrecta', '✗ No es correcto. Al dividir, los exponentes se restan, no se conservan. Intenta nuevamente.', 'repaso-3')">3x⁴ + 2x³ + x</div>
+                    </div>
+                    <div id="retroalimentacion-repaso-3" class="retroalimentacion-repaso"></div>
+                    <button class="boton-reintentar" id="reintentar-repaso-3" style="display: none;" onclick="reintentar('repaso-3')">🔄 Intentar de nuevo</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="repaso-en">
+            <h1>Final Review</h1>
+            <div class="contenido">
+                <p style="margin-bottom: 20px;">Answer the following questions correctly:</p>
+
+                <div class="pregunta-repaso">
+                    <div class="numero">Question 1:</div>
+                    <div class="enunciado">What is the result of (5x + 2) + (3x - 1)?</div>
+                    <div class="respuestas-repaso" id="repaso-1-en">
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'correcta', '✓ Correct! You correctly identified that 5x + 3x = 8x and 2 - 1 = 1.', 'repaso-1-en')">8x + 1</div>
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'incorrecta', '✗ Not correct. Add the terms with x: 5x + 3x = 8x, and the numbers: 2 - 1 = 1. Try again.', 'repaso-1-en')">2x + 3</div>
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'incorrecta', '✗ Not correct. Remember that you must subtract 1, not add. Try again.', 'repaso-1-en')">8x - 1</div>
+                    </div>
+                    <div id="retroalimentacion-repaso-1-en" class="retroalimentacion-repaso"></div>
+                    <button class="boton-reintentar" id="reintentar-repaso-1-en" style="display: none;" onclick="reintentar('repaso-1-en')">🔄 Try again</button>
+                </div>
+
+                <div class="pregunta-repaso">
+                    <div class="numero">Question 2:</div>
+                    <div class="enunciado">What is the result of 3x · (2x² + x - 1)?</div>
+                    <div class="respuestas-repaso" id="repaso-2-en">
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'incorrecta', '✗ Not correct. You must multiply 3x by each term. Try again.', 'repaso-2-en')">6x³ + x - 1</div>
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'correcta', '✓ Excellent! You correctly applied the distributive property: 3x·2x² = 6x³, 3x·x = 3x², 3x·(-1) = -3x.', 'repaso-2-en')">6x³ + 3x² - 3x</div>
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'incorrecta', '✗ Not correct. Remember to multiply each term in the parentheses. Try again.', 'repaso-2-en')">5x³ + 2x</div>
+                    </div>
+                    <div id="retroalimentacion-repaso-2-en" class="retroalimentacion-repaso"></div>
+                    <button class="boton-reintentar" id="reintentar-repaso-2-en" style="display: none;" onclick="reintentar('repaso-2-en')">🔄 Try again</button>
+                </div>
+
+                <div class="pregunta-repaso">
+                    <div class="numero">Question 3:</div>
+                    <div class="enunciado">What is the result of (6x⁴ + 4x³ + 2x) ÷ 2x?</div>
+                    <div class="respuestas-repaso" id="repaso-3-en">
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'correcta', '✓ Perfect! You correctly divided each term: 6x⁴÷2x = 3x³, 4x³÷2x = 2x², 2x÷2x = 1.', 'repaso-3-en')">3x³ + 2x² + 1</div>
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'incorrecta', '✗ Not correct. Remember that you must divide each term by 2x. Try again.', 'repaso-3-en')">6x³ + 2x² + x</div>
+                        <div class="respuesta-opcion" onclick="verificarRepasoMulti(this, 'incorrecta', '✗ Not correct. When dividing, exponents are subtracted, not preserved. Try again.', 'repaso-3-en')">3x⁴ + 2x³ + x</div>
+                    </div>
+                    <div id="retroalimentacion-repaso-3-en" class="retroalimentacion-repaso"></div>
+                    <button class="boton-reintentar" id="reintentar-repaso-3-en" style="display: none;" onclick="reintentar('repaso-3-en')">🔄 Try again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 13: METACOGNICIÓN -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="meta-es">
+            <h1>Reflexionemos sobre lo aprendido</h1>
+            <div class="reflexion-contenedor">
+                
+                <div class="pregunta-metacognitiva">
+                    🤔 <strong>¿Cuál fue lo más fácil para ti?</strong>
+                    <div style="display: grid; gap: 10px; margin-top: 12px;">
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">✓ Suma de polinomios</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">✓ Resta de polinomios</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">✓ Multiplicación de polinomios</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">✓ División de polinomios</button>
+                    </div>
+                </div>
+
+                <div class="pregunta-metacognitiva">
+                    ⚡ <strong>¿En qué debo mejorar?</strong>
+                    <div style="display: grid; gap: 10px; margin-top: 12px;">
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">⚠️ Identificar términos semejantes</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">⚠️ Aplicar la propiedad distributiva</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">⚠️ Organizar el procedimiento</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">⚠️ Manejar los signos correctamente</button>
+                    </div>
+                </div>
+
+                <div class="pregunta-metacognitiva">
+                    🎯 <strong>¿Cuánto tiempo pasarás practicando esta semana?</strong>
+                    <div style="display: grid; gap: 10px; margin-top: 12px;">
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">📅 30 minutos</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">📅 1 hora</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">📅 2 horas o más</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">📅 Depende de mi disponibilidad</button>
+                    </div>
+                </div>
+
+                <div class="pregunta-metacognitiva">
+                    💡 <strong>¿Cómo te sentiste con esta lección?</strong>
+                    <div style="display: grid; gap: 10px; margin-top: 12px;">
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">😊 Muy cómodo, lo entendí bien</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">😐 Normal, entendí la mayoría</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">😟 Difícil, necesito más práctica</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">🤔 Muy difícil, tengo dudas</button>
+                    </div>
+                </div>
+
+                <p style="margin-top: 30px; background: #f7be00; padding: 15px; border-radius: 8px; color: #244b5a; text-align: center; font-weight: bold;">
+                    ✨ Tu reflexión sincera nos ayuda a mejorar. ¡Selecciona tus respuestas!
+                </p>
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="meta-en">
+            <h1>Reflecting on what we learned</h1>
+            <div class="reflexion-contenedor">
+                
+                <div class="pregunta-metacognitiva">
+                    🤔 <strong>What was easiest for you?</strong>
+                    <div style="display: grid; gap: 10px; margin-top: 12px;">
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">✓ Addition of polynomials</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">✓ Subtraction of polynomials</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">✓ Multiplication of polynomials</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">✓ Division of polynomials</button>
+                    </div>
+                </div>
+
+                <div class="pregunta-metacognitiva">
+                    ⚡ <strong>What do I need to improve?</strong>
+                    <div style="display: grid; gap: 10px; margin-top: 12px;">
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">⚠️ Identifying similar terms</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">⚠️ Applying the distributive property</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">⚠️ Organizing the procedure</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">⚠️ Handling signs correctly</button>
+                    </div>
+                </div>
+
+                <div class="pregunta-metacognitiva">
+                    🎯 <strong>How much time will you practice this week?</strong>
+                    <div style="display: grid; gap: 10px; margin-top: 12px;">
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">📅 30 minutes</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">📅 1 hour</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">📅 2 hours or more</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">📅 Depends on my availability</button>
+                    </div>
+                </div>
+
+                <div class="pregunta-metacognitiva">
+                    💡 <strong>How did you feel about this lesson?</strong>
+                    <div style="display: grid; gap: 10px; margin-top: 12px;">
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">😊 Very comfortable, I understood well</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">😐 Normal, I understood most of it</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">😟 Difficult, I need more practice</button>
+                        <button class="boton-metacognitiva" onclick="seleccionarMetacognicion(this)">🤔 Very difficult, I have doubts</button>
+                    </div>
+                </div>
+
+                <p style="margin-top: 30px; background: #f7be00; padding: 15px; border-radius: 8px; color: #244b5a; text-align: center; font-weight: bold;">
+                    ✨ Your honest reflection helps us improve. Select your answers!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAPOSITIVA 14: CIERRE -->
+    <div class="diapositiva">
+        <div class="contenido-idioma activo" id="cierre-es">
+            <div class="cierre">
+                <div class="sello-logro">🏆</div>
+                <h1>¡Felicidades!</h1>
+                <p class="mensaje">
+                    Has completado exitosamente la Lección 1: Operaciones entre Polinomios.
+                    <br><br>
+                    Ahora posees las herramientas fundamentales para resolver sumas, restas, multiplicaciones y divisiones de polinomios.
+                </p>
+                <div class="proximos-pasos">
+                    <p style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">🚀 Próximos pasos:</p>
+                    <ul style="color: white; text-align: left; display: inline-block;">
+                        <li>Practica más ejercicios en tu cuaderno</li>
+                        <li>Resuelve los problemas propuestos en el foro</li>
+                        <li>Prepárate para la siguiente lección: Factorización de Polinomios</li>
+                    </ul>
+                </div>
+                <p style="margin-top: 20px; font-size: 16px; opacity: 0.9;">
+                    "El éxito en matemáticas viene de la práctica constante. ¡Sigue adelante!"
+                </p>
+            </div>
+        </div>
+
+        <div class="contenido-idioma" id="cierre-en">
+            <div class="cierre">
+                <div class="sello-logro">🏆</div>
+                <h1>Congratulations!</h1>
+                <p class="mensaje">
+                    You have successfully completed Lesson 1: Operations with Polynomials.
+                    <br><br>
+                    Now you have the fundamental tools to solve additions, subtractions, multiplications, and divisions of polynomials.
+                </p>
+                <div class="proximos-pasos">
+                    <p style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">🚀 Next Steps:</p>
+                    <ul style="color: white; text-align: left; display: inline-block;">
+                        <li>Practice more exercises in your notebook</li>
+                        <li>Solve the problems proposed in the forum</li>
+                        <li>Prepare for the next lesson: Factorization of Polynomials</li>
+                    </ul>
+                </div>
+                <p style="margin-top: 20px; font-size: 16px; opacity: 0.9;">
+                    "Success in mathematics comes from constant practice. Keep going!"
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- NAVEGACIÓN -->
+<div class="navegacion">
+    <button class="flecha" id="flecha-anterior" onclick="cambiarDiapositiva(-1)">❮</button>
+    <button class="flecha" id="flecha-siguiente" onclick="cambiarDiapositiva(1)">❯</button>
+</div>
+
+<!-- CONTADOR -->
+<div class="contador" id="contador">1 / 14</div>
+
+<script>
+    let diapositivaActual = 0;
+    let idiomaActual = 'es';
+    const diapositivas = document.querySelectorAll('.diapositiva');
+    const totalDiapositivas = diapositivas.length;
+
+    function cambiarIdioma(idioma) {
+        idiomaActual = idioma;
+        
+        // Cambiar botones activos
+        document.getElementById('btn-es').classList.remove('activo');
+        document.getElementById('btn-en').classList.remove('activo');
+        
+        if (idioma === 'es') {
+            document.getElementById('btn-es').classList.add('activo');
+        } else {
+            document.getElementById('btn-en').classList.add('activo');
+        }
+
+        // Cambiar contenido en todas las diapositivas
+        document.querySelectorAll('.contenido-idioma').forEach(elemento => {
+            elemento.classList.remove('activo');
+        });
+
+        document.querySelectorAll(`.contenido-idioma[id$="-${idioma}"]`).forEach(elemento => {
+            elemento.classList.add('activo');
+        });
+
+        // Limpiar ejemplo de Diapositiva 8 del idioma anterior
+        const ejemploAnterior = idioma === 'es' ? 'en' : 'es';
+        const ejemploAnteriorDiv = document.getElementById(`ejemplo-mostrado-${ejemploAnterior}`);
+        if (ejemploAnteriorDiv) {
+            ejemploAnteriorDiv.style.display = 'none';
+        }
+
+        // Reinicializar el juego si está en la diapositiva 10
+        if (diapositivaActual === 9) {
+            setTimeout(() => {
+                if (idioma === 'es') {
+                    limpiarJuegoEn();
+                    inicializarJuego();
+                } else {
+                    limpiarJuego();
+                    inicializarJuegoEn();
+                }
+            }, 100);
+        }
+    }
+
+    function cambiarDiapositiva(direccion) {
+        diapositivaActual += direccion;
+
+        if (diapositivaActual < 0) {
+            diapositivaActual = 0;
+        } else if (diapositivaActual >= totalDiapositivas) {
+            diapositivaActual = totalDiapositivas - 1;
+        }
+
+        mostrarDiapositiva(diapositivaActual);
+    }
+
+    function mostrarDiapositiva(indice) {
+        diapositivas.forEach((diap, idx) => {
+            diap.classList.remove('activa');
+            if (idx === indice) {
+                diap.classList.add('activa');
+                if (idx === 9) {
+                    if (idiomaActual === 'es') {
+                        limpiarJuegoEn();
+                        inicializarJuego();
+                    } else {
+                        limpiarJuego();
+                        inicializarJuegoEn();
+                    }
+                }
+            }
+        });
+
+        actualizarNavegacion();
+        document.getElementById('contador').textContent = (indice + 1) + ' / ' + totalDiapositivas;
+    }
+
+    function actualizarNavegacion() {
+        const flechaAnterior = document.getElementById('flecha-anterior');
+        const flechaSiguiente = document.getElementById('flecha-siguiente');
+
+        if (diapositivaActual === 0) {
+            flechaAnterior.classList.add('deshabilitada');
+        } else {
+            flechaAnterior.classList.remove('deshabilitada');
+        }
+
+        if (diapositivaActual === totalDiapositivas - 1) {
+            flechaSiguiente.classList.add('deshabilitada');
+        } else {
+            flechaSiguiente.classList.remove('deshabilitada');
+        }
+    }
+
+    // ============= JUEGO ESPAÑOL =============
+    const preguntasJuegoES = [
+        {
+            operacion: '(3x + 2) + (x - 1)',
+            correcta: 'Suma',
+            opciones: ['Suma', 'Resta', 'Multiplicación']
+        },
+        {
+            operacion: '(5x - 3) - (2x + 1)',
+            correcta: 'Resta',
+            opciones: ['Suma', 'Resta', 'Multiplicación']
+        },
+        {
+            operacion: '2x · (x² + 3x)',
+            correcta: 'Multiplicación',
+            opciones: ['Suma', 'Resta', 'Multiplicación']
+        },
+        {
+            operacion: '(x + 1) + (2x - 3)',
+            correcta: 'Suma',
+            opciones: ['Suma', 'Resta', 'División']
+        },
+        {
+            operacion: '(4x²) · (x + 2)',
+            correcta: 'Multiplicación',
+            opciones: ['Suma', 'Multiplicación', 'División']
+        }
+    ];
+
+    let respuestasJuegoES = {};
+    let totalRespondidasES = 0;
+
+    function inicializarJuego() {
+        respuestasJuegoES = {};
+        totalRespondidasES = 0;
+        const contenedor = document.getElementById('contenedor-juego');
+        contenedor.innerHTML = '';
+
+        preguntasJuegoES.forEach((pregunta, indice) => {
+            const divPregunta = document.createElement('div');
+            divPregunta.id = `juego-item-${indice}`;
+            divPregunta.style.background = '#f0f8ff';
+            divPregunta.style.padding = '20px';
+            divPregunta.style.borderRadius = '8px';
+            divPregunta.style.marginBottom = '15px';
+            divPregunta.style.borderLeft = '4px solid #db6015';
+
+            const operacion = document.createElement('p');
+            operacion.style.fontSize = '18px';
+            operacion.style.fontWeight = 'bold';
+            operacion.style.color = '#244b5a';
+            operacion.style.marginBottom = '12px';
+            operacion.textContent = '📝 ' + pregunta.operacion;
+            divPregunta.appendChild(operacion);
+
+            const botonesDiv = document.createElement('div');
+            botonesDiv.style.display = 'flex';
+            botonesDiv.style.gap = '10px';
+            botonesDiv.style.flexWrap = 'wrap';
+
+            pregunta.opciones.forEach(opcion => {
+                const boton = document.createElement('button');
+                boton.type = 'button';
+                boton.className = 'boton-juego-opcion';
+                boton.textContent = opcion;
+                boton.setAttribute('data-indice', indice);
+                boton.setAttribute('data-opcion', opcion);
+                boton.setAttribute('data-correcta', pregunta.correcta);
+                boton.style.padding = '10px 20px';
+                boton.style.borderRadius = '6px';
+                boton.style.border = '2px solid #244b5a';
+                boton.style.background = 'white';
+                boton.style.color = '#244b5a';
+                boton.style.fontWeight = 'bold';
+                boton.style.cursor = 'pointer';
+                boton.style.transition = 'all 0.3s ease';
+                boton.style.fontSize = '15px';
+
+                boton.addEventListener('mouseover', function() {
+                    if (this.style.pointerEvents !== 'none') {
+                        this.style.background = '#f7be00';
+                        this.style.borderColor = '#db6015';
+                    }
+                });
+
+                boton.addEventListener('mouseout', function() {
+                    if (this.style.pointerEvents !== 'none' && this.style.background !== '#d4edda' && this.style.background !== '#f8d7da') {
+                        this.style.background = 'white';
+                        this.style.borderColor = '#244b5a';
+                    }
+                });
+
+                boton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    responderJuegoOpciones(this, 'es');
+                });
+
+                botonesDiv.appendChild(boton);
+            });
+
+            divPregunta.appendChild(botonesDiv);
+            contenedor.appendChild(divPregunta);
+        });
+    }
+
+    function inicializarJuego() {
+        respuestasJuegoES = {};
+        totalRespondidasES = 0;
+        const contenedor = document.getElementById('contenedor-juego');
+        contenedor.innerHTML = '';
+
+        preguntasJuegoES.forEach((pregunta, indice) => {
+            const divPregunta = document.createElement('div');
+            divPregunta.id = `juego-es-item-${indice}`;
+            divPregunta.style.background = '#f0f8ff';
+            divPregunta.style.padding = '20px';
+            divPregunta.style.borderRadius = '8px';
+            divPregunta.style.marginBottom = '15px';
+            divPregunta.style.borderLeft = '4px solid #db6015';
+
+            const operacion = document.createElement('p');
+            operacion.style.fontSize = '18px';
+            operacion.style.fontWeight = 'bold';
+            operacion.style.color = '#244b5a';
+            operacion.style.marginBottom = '12px';
+            operacion.textContent = '📝 ' + pregunta.operacion;
+            divPregunta.appendChild(operacion);
+
+            const botonesDiv = document.createElement('div');
+            botonesDiv.style.display = 'flex';
+            botonesDiv.style.gap = '10px';
+            botonesDiv.style.flexWrap = 'wrap';
+
+            pregunta.opciones.forEach(opcion => {
+                const boton = document.createElement('button');
+                boton.type = 'button';
+                boton.className = 'boton-juego-opcion';
+                boton.textContent = opcion;
+                boton.setAttribute('data-indice', indice);
+                boton.setAttribute('data-opcion', opcion);
+                boton.setAttribute('data-correcta', pregunta.correcta);
+                boton.setAttribute('data-idioma', 'es');
+                boton.style.padding = '10px 20px';
+                boton.style.borderRadius = '6px';
+                boton.style.border = '2px solid #244b5a';
+                boton.style.background = 'white';
+                boton.style.color = '#244b5a';
+                boton.style.fontWeight = 'bold';
+                boton.style.cursor = 'pointer';
+                boton.style.transition = 'all 0.3s ease';
+                boton.style.fontSize = '15px';
+
+                boton.addEventListener('mouseover', function() {
+                    if (this.style.pointerEvents !== 'none') {
+                        this.style.background = '#f7be00';
+                        this.style.borderColor = '#db6015';
+                    }
+                });
+
+                boton.addEventListener('mouseout', function() {
+                    if (this.style.pointerEvents !== 'none' && this.style.background !== '#d4edda' && this.style.background !== '#f8d7da') {
+                        this.style.background = 'white';
+                        this.style.borderColor = '#244b5a';
+                    }
+                });
+
+                boton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    responderJuegoOpciones(this, 'es');
+                });
+
+                botonesDiv.appendChild(boton);
+            });
+
+            divPregunta.appendChild(botonesDiv);
+            contenedor.appendChild(divPregunta);
+        });
+    }
+
+    function responderJuegoOpciones(boton, idioma) {
+        const indice = boton.getAttribute('data-indice');
+        const opcion = boton.getAttribute('data-opcion');
+        const correcta = boton.getAttribute('data-correcta');
+        
+        if (idioma === 'es') {
+            respuestasJuegoES[indice] = (opcion === correcta);
+            const itemDiv = document.getElementById(`juego-es-item-${indice}`);
+            const botones = itemDiv.querySelectorAll('.boton-juego-opcion');
+            
+            botones.forEach(b => {
+                b.style.pointerEvents = 'none';
+                
+                if (b.getAttribute('data-opcion') === correcta) {
+                    b.style.background = '#d4edda';
+                    b.style.borderColor = '#28a745';
+                    b.style.color = '#155724';
+                } else if (b === boton && opcion !== correcta) {
+                    b.style.background = '#f8d7da';
+                    b.style.borderColor = '#f5c6cb';
+                    b.style.color = '#721c24';
+                }
+            });
+
+            totalRespondidasES++;
+            if (totalRespondidasES === preguntasJuegoES.length) {
+                setTimeout(mostrarResultadoJuegoES, 500);
+            }
+        } else {
+            respuestasJuegoEN[indice] = (opcion === correcta);
+            const itemDiv = document.getElementById(`juego-en-item-${indice}`);
+            const botones = itemDiv.querySelectorAll('.boton-juego-opcion');
+            
+            botones.forEach(b => {
+                b.style.pointerEvents = 'none';
+                
+                if (b.getAttribute('data-opcion') === correcta) {
+                    b.style.background = '#d4edda';
+                    b.style.borderColor = '#28a745';
+                    b.style.color = '#155724';
+                } else if (b === boton && opcion !== correcta) {
+                    b.style.background = '#f8d7da';
+                    b.style.borderColor = '#f5c6cb';
+                    b.style.color = '#721c24';
+                }
+            });
+
+            totalRespondidasEN++;
+            if (totalRespondidasEN === preguntasJuegoEN.length) {
+                setTimeout(mostrarResultadoJuegoEN, 500);
+            }
+        }
+    }
+
+    function mostrarResultadoJuegoES() {
+        const correctas = Object.values(respuestasJuegoES).filter(r => r === true).length;
+        const total = preguntasJuegoES.length;
+        const resultadoDiv = document.getElementById('resultado-juego-final');
+        const textoResultado = document.getElementById('texto-resultado-juego');
+
+        let mensaje = '';
+        let emoji = '';
+
+        if (correctas === total) {
+            emoji = '🏆';
+            mensaje = `¡Excelente! Obtuviste ${correctas}/${total} puntos. ¡Dominas la clasificación de operaciones!`;
+        } else if (correctas >= 3) {
+            emoji = '⭐';
+            mensaje = `¡Muy bien! Obtuviste ${correctas}/${total} puntos. Sigue practicando.`;
+        } else {
+            emoji = '💪';
+            mensaje = `Obtuviste ${correctas}/${total} puntos. Intenta de nuevo para mejorar.`;
+        }
+
+        textoResultado.innerHTML = `${emoji} ${mensaje}`;
+        resultadoDiv.style.display = 'block';
+    }
+
+    function limpiarJuego() {
+        const contenedor = document.getElementById('contenedor-juego');
+        if (contenedor) contenedor.innerHTML = '';
+        const resultadoDiv = document.getElementById('resultado-juego-final');
+        if (resultadoDiv) resultadoDiv.style.display = 'none';
+    }
+
+    // ============= JUEGO INGLÉS =============
+    const preguntasJuegoEN = [
+        {
+            operacion: '(3x + 2) + (x - 1)',
+            correcta: 'Addition',
+            opciones: ['Addition', 'Subtraction', 'Multiplication']
+        },
+        {
+            operacion: '(5x - 3) - (2x + 1)',
+            correcta: 'Subtraction',
+            opciones: ['Addition', 'Subtraction', 'Multiplication']
+        },
+        {
+            operacion: '2x · (x² + 3x)',
+            correcta: 'Multiplication',
+            opciones: ['Addition', 'Subtraction', 'Multiplication']
+        },
+        {
+            operacion: '(x + 1) + (2x - 3)',
+            correcta: 'Addition',
+            opciones: ['Addition', 'Subtraction', 'Division']
+        },
+        {
+            operacion: '(4x²) · (x + 2)',
+            correcta: 'Multiplication',
+            opciones: ['Addition', 'Multiplication', 'Division']
+        }
+    ];
+
+    let respuestasJuegoEN = {};
+    let totalRespondidasEN = 0;
+
+    function inicializarJuegoEn() {
+        respuestasJuegoEN = {};
+        totalRespondidasEN = 0;
+        const contenedor = document.getElementById('contenedor-juego-en');
+        contenedor.innerHTML = '';
+
+        preguntasJuegoEN.forEach((pregunta, indice) => {
+            const divPregunta = document.createElement('div');
+            divPregunta.id = `juego-en-item-${indice}`;
+            divPregunta.style.background = '#f0f8ff';
+            divPregunta.style.padding = '20px';
+            divPregunta.style.borderRadius = '8px';
+            divPregunta.style.marginBottom = '15px';
+            divPregunta.style.borderLeft = '4px solid #db6015';
+
+            const operacion = document.createElement('p');
+            operacion.style.fontSize = '18px';
+            operacion.style.fontWeight = 'bold';
+            operacion.style.color = '#244b5a';
+            operacion.style.marginBottom = '12px';
+            operacion.textContent = '📝 ' + pregunta.operacion;
+            divPregunta.appendChild(operacion);
+
+            const botonesDiv = document.createElement('div');
+            botonesDiv.style.display = 'flex';
+            botonesDiv.style.gap = '10px';
+            botonesDiv.style.flexWrap = 'wrap';
+
+            pregunta.opciones.forEach(opcion => {
+                const boton = document.createElement('button');
+                boton.type = 'button';
+                boton.className = 'boton-juego-opcion';
+                boton.textContent = opcion;
+                boton.setAttribute('data-indice', indice);
+                boton.setAttribute('data-opcion', opcion);
+                boton.setAttribute('data-correcta', pregunta.correcta);
+                boton.setAttribute('data-idioma', 'en');
+                boton.style.padding = '10px 20px';
+                boton.style.borderRadius = '6px';
+                boton.style.border = '2px solid #244b5a';
+                boton.style.background = 'white';
+                boton.style.color = '#244b5a';
+                boton.style.fontWeight = 'bold';
+                boton.style.cursor = 'pointer';
+                boton.style.transition = 'all 0.3s ease';
+                boton.style.fontSize = '15px';
+
+                boton.addEventListener('mouseover', function() {
+                    if (this.style.pointerEvents !== 'none') {
+                        this.style.background = '#f7be00';
+                        this.style.borderColor = '#db6015';
+                    }
+                });
+
+                boton.addEventListener('mouseout', function() {
+                    if (this.style.pointerEvents !== 'none' && this.style.background !== '#d4edda' && this.style.background !== '#f8d7da') {
+                        this.style.background = 'white';
+                        this.style.borderColor = '#244b5a';
+                    }
+                });
+
+                boton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    responderJuegoOpciones(this, 'en');
+                });
+
+                botonesDiv.appendChild(boton);
+            });
+
+            divPregunta.appendChild(botonesDiv);
+            contenedor.appendChild(divPregunta);
+        });
+    }
+
+    function mostrarResultadoJuegoEN() {
+        const correctas = Object.values(respuestasJuegoEN).filter(r => r === true).length;
+        const total = preguntasJuegoEN.length;
+        const resultadoDiv = document.getElementById('resultado-juego-final-en');
+        const textoResultado = document.getElementById('texto-resultado-juego-en');
+
+        let mensaje = '';
+        let emoji = '';
+
+        if (correctas === total) {
+            emoji = '🏆';
+            mensaje = `Excellent! You got ${correctas}/${total} points. You master operation classification!`;
+        } else if (correctas >= 3) {
+            emoji = '⭐';
+            mensaje = `Very good! You got ${correctas}/${total} points. Keep practicing.`;
+        } else {
+            emoji = '💪';
+            mensaje = `You got ${correctas}/${total} points. Try again to improve.`;
+        }
+
+        textoResultado.innerHTML = `${emoji} ${mensaje}`;
+        resultadoDiv.style.display = 'block';
+    }
+
+    function limpiarJuegoEn() {
+        const contenedor = document.getElementById('contenedor-juego-en');
+        if (contenedor) contenedor.innerHTML = '';
+        const resultadoDiv = document.getElementById('resultado-juego-final-en');
+        if (resultadoDiv) resultadoDiv.style.display = 'none';
+    }
+
+    function reiniciarJuego() {
+        inicializarJuego();
+        document.getElementById('resultado-juego-final').style.display = 'none';
+    }
+
+    function reiniciarJuegoEn() {
+        inicializarJuegoEn();
+        document.getElementById('resultado-juego-final-en').style.display = 'none';
+    }
+
+    // ============= FUNCIONES DE ACTIVIDADES =============
+    function verificarRespuesta(elemento, tipo, mensaje, actividadId) {
+        // Encontrar el contenedor de opciones más cercano
+        const contenedorOpciones = elemento.closest('.opciones');
+        const opciones = contenedorOpciones.querySelectorAll('.opcion');
+        
+        opciones.forEach(opt => {
+            opt.style.pointerEvents = 'none';
+        });
+
+        elemento.classList.add('seleccionada');
+
+        const retroalimentacion = document.getElementById(`retroalimentacion-${actividadId}`);
+        if (retroalimentacion) {
+            retroalimentacion.textContent = mensaje;
+            retroalimentacion.classList.add(tipo);
+            retroalimentacion.style.display = 'block';
+        }
+
+        const botonReintentar = document.getElementById(`reintentar-${actividadId}`);
+        if (botonReintentar) {
+            botonReintentar.style.display = 'block';
+        }
+    }
+
+    function reintentar(actividadId) {
+        // Buscar el contenedor de opciones asociado
+        let contenedorOpciones = document.getElementById(`opciones-${actividadId}`);
+        
+        // Si no lo encuentra con ese ID, buscar por atributo
+        if (!contenedorOpciones) {
+            contenedorOpciones = document.querySelector(`[id*="${actividadId}"].opciones`);
+        }
+
+        // Si aún no lo encuentra, buscar el div padre visible más cercano
+        if (!contenedorOpciones) {
+            const retroalimentacion = document.getElementById(`retroalimentacion-${actividadId}`);
+            if (retroalimentacion) {
+                contenedorOpciones = retroalimentacion.previousElementSibling;
+            }
+        }
+
+        if (!contenedorOpciones) return;
+
+        let opciones = contenedorOpciones.querySelectorAll('.opcion');
+        
+        // Si son opciones de repaso, buscar respuesta-opcion
+        if (opciones.length === 0) {
+            opciones = contenedorOpciones.querySelectorAll('.respuesta-opcion');
+        }
+
+        opciones.forEach(opt => {
+            opt.style.pointerEvents = 'auto';
+            opt.style.background = '';
+            opt.style.color = '';
+            opt.style.borderColor = '';
+            opt.classList.remove('seleccionada');
+        });
+
+        const retroalimentacion = document.getElementById(`retroalimentacion-${actividadId}`);
+        if (retroalimentacion) {
+            retroalimentacion.classList.remove('correcta', 'incorrecta');
+            retroalimentacion.innerHTML = '';
+            retroalimentacion.style.display = 'none';
+        }
+
+        const botonReintentar = document.getElementById(`reintentar-${actividadId}`);
+        if (botonReintentar) {
+            botonReintentar.style.display = 'none';
+        }
+    }
+
+    function verificarRepasoMulti(elemento, tipo, mensaje, grupoId) {
+        // Encontrar el contenedor de respuestas más cercano
+        const contenedorRespuestas = elemento.closest('.respuestas-repaso');
+        if (!contenedorRespuestas) return;
+        
+        const opciones = contenedorRespuestas.querySelectorAll('.respuesta-opcion');
+        
+        opciones.forEach(opt => {
+            opt.style.pointerEvents = 'none';
+        });
+        
+        if (tipo === 'correcta') {
+            elemento.style.background = '#d4edda';
+            elemento.style.color = '#155724';
+        } else {
+            elemento.style.background = '#f8d7da';
+            elemento.style.color = '#721c24';
+        }
+        
+        const retroalimentacion = document.getElementById(`retroalimentacion-${grupoId}`);
+        if (retroalimentacion) {
+            retroalimentacion.textContent = mensaje;
+            retroalimentacion.classList.add(tipo);
+            retroalimentacion.style.display = 'block';
+        }
+
+        const botonReintentar = document.getElementById(`reintentar-${grupoId}`);
+        if (botonReintentar) {
+            botonReintentar.style.display = 'block';
+        }
+    }
+
+    function mostrarEjemploBilingual(tipo, idioma) {
+        const ejemploMostrado = document.getElementById(`ejemplo-mostrado-${idioma}`);
+        const contenidoEjemplo = document.getElementById(`contenido-ejemplo-${idioma}`);
+
+        const ejemplosES = {
+            suma: '(3x² + 2x - 1) + (x² - x + 3) = 4x² + x + 2<br><br>Paso 1: Identificamos términos semejantes<br>Paso 2: 3x² + x² = 4x²<br>Paso 3: 2x + (-x) = x<br>Paso 4: -1 + 3 = 2<br>Resultado: 4x² + x + 2',
+            
+            resta: '(5x² + 3x + 2) - (2x² + x - 1)<br>= 5x² + 3x + 2 - 2x² - x + 1<br>= 3x² + 2x + 3<br><br>Recuerda: Cambia los signos del segundo polinomio y suma.',
+            
+            mult: '(2x + 1)(x + 3)<br>= 2x·x + 2x·3 + 1·x + 1·3<br>= 2x² + 6x + x + 3<br>= 2x² + 7x + 3<br><br>Usamos la propiedad distributiva.'
+        };
+
+        const ejemplosEN = {
+            suma: '(3x² + 2x - 1) + (x² - x + 3) = 4x² + x + 2<br><br>Step 1: We identify similar terms<br>Step 2: 3x² + x² = 4x²<br>Step 3: 2x + (-x) = x<br>Step 4: -1 + 3 = 2<br>Result: 4x² + x + 2',
+            
+            resta: '(5x² + 3x + 2) - (2x² + x - 1)<br>= 5x² + 3x + 2 - 2x² - x + 1<br>= 3x² + 2x + 3<br><br>Remember: Change the signs of the second polynomial and add.',
+            
+            mult: '(2x + 1)(x + 3)<br>= 2x·x + 2x·3 + 1·x + 1·3<br>= 2x² + 6x + x + 3<br>= 2x² + 7x + 3<br><br>We use the distributive property.'
+        };
+
+        const ejemplos = idioma === 'es' ? ejemplosES : ejemplosEN;
+        
+        if (contenidoEjemplo && ejemploMostrado) {
+            contenidoEjemplo.innerHTML = ejemplos[tipo];
+            ejemploMostrado.style.display = 'block';
+        }
+    }
+
+    function mostrarEjemplo(tipo) {
+        mostrarEjemploBilingual(tipo, idiomaActual);
+    }
+
+    function seleccionarMetacognicion(boton) {
+        const contenedorPregunta = boton.closest('.pregunta-metacognitiva');
+        
+        const botonesMismaPreg = contenedorPregunta.querySelectorAll('.boton-metacognitiva');
+        botonesMismaPreg.forEach(b => {
+            b.classList.remove('seleccionado');
+        });
+
+        boton.classList.add('seleccionado');
+    }
+
+    // INITIALIZE
+    mostrarDiapositiva(0);
+</script>
+
+</body>
+</html>
